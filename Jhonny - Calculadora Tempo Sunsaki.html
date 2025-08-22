@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Calculadora de Tempo - Sunsaki</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background: #ffffff;
+        text-align: center;
+    }
+    .logo {
+        max-width: 200px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        color: #333;
+    }
+    .linha {
+        margin: 8px 0;
+    }
+    input {
+        padding: 8px;
+        margin: 5px;
+        width: 60px;
+        text-align: center;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+    button {
+        padding: 8px 15px;
+        margin: 10px 5px;
+        background: #d62828;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    button:hover {
+        background: #b71c1c;
+    }
+    .resultado {
+        margin-top: 15px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #444;
+    }
+</style>
+</head>
+<body>
+
+<img src="Logo Sunsaki.png" alt="Sunsaki" class="logo">
+
+<h2>Calculadora de Horas, Minutos e Segundos</h2>
+
+<!-- Campo para definir quantidade -->
+<div>
+    <label for="qtd">Quantidade de campos: </label>
+    <input type="number" id="qtd" min="1" value="1" style="width:80px;">
+    <button onclick="adicionarCampos()">Adicionar</button>
+</div>
+
+<!-- Contêiner dos inputs -->
+<div id="campos">
+    <div class="linha">
+        <input id="h1" type="number" min="0" placeholder="hh">
+        <input id="m1" type="number" min="0" max="59" placeholder="mm">
+        <input id="s1" type="number" min="0" max="59" placeholder="ss">
+    </div>
+
+    <div class="linha">
+        <input id="h2" type="number" min="0" placeholder="hh">
+        <input id="m2" type="number" min="0" max="59" placeholder="mm">
+        <input id="s2" type="number" min="0" max="59" placeholder="ss">
+    </div>
+</div>
+
+<div>
+    <button onclick="adicionar()">Adição</button>
+    <button onclick="subtrair()">Subtração</button>
+    <button onclick="resetar()">Reset</button>
+</div>
+
+<div class="resultado" id="resultado"></div>
+
+<script>
+function pegarTempo(h, m, s) {
+    return (parseInt(h) || 0) * 3600 + (parseInt(m) || 0) * 60 + (parseInt(s) || 0);
+}
+
+function formatarTempo(totalSegundos) {
+    let horas = Math.floor(Math.abs(totalSegundos) / 3600);
+    let minutos = Math.floor((Math.abs(totalSegundos) % 3600) / 60);
+    let segundos = Math.abs(totalSegundos % 60);
+    return `${String(horas).padStart(2, '0')}:${String(minutos).padStart(2, '0')}:${String(segundos).padStart(2, '0')}`;
+}
+
+function adicionar() {
+    let t1 = pegarTempo(h1.value, m1.value, s1.value);
+    let t2 = pegarTempo(h2.value, m2.value, s2.value);
+    let resultado = t1 + t2;
+    document.getElementById("resultado").innerText = "Resultado: " + formatarTempo(resultado);
+}
+
+function subtrair() {
+    let t1 = pegarTempo(h1.value, m1.value, s1.value);
+    let t2 = pegarTempo(h2.value, m2.value, s2.value);
+    let resultado = t1 - t2;
+    document.getElementById("resultado").innerText = "Resultado: " + formatarTempo(resultado);
+}
+
+function resetar() {
+    document.getElementById("campos").innerHTML = `
+        <div class="linha">
+            <input id="h1" type="number" min="0" placeholder="hh">
+            <input id="m1" type="number" min="0" max="59" placeholder="mm">
+            <input id="s1" type="number" min="0" max="59" placeholder="ss">
+        </div>
+        <div class="linha">
+            <input id="h2" type="number" min="0" placeholder="hh">
+            <input id="m2" type="number" min="0" max="59" placeholder="mm">
+            <input id="s2" type="number" min="0" max="59" placeholder="ss">
+        </div>
+    `;
+    document.getElementById("resultado").innerText = "";
+}
+
+function adicionarCampos() {
+    let qtd = parseInt(document.getElementById("qtd").value) || 1;
+    let container = document.getElementById("campos");
+
+    for (let i = 0; i < qtd; i++) {
+        let div = document.createElement("div");
+        div.classList.add("linha");
+
+        let h = document.createElement("input");
+        h.type = "number"; h.min = "0"; h.placeholder = "hh";
+
+        let m = document.createElement("input");
+        m.type = "number"; m.min = "0"; m.max = "59"; m.placeholder = "mm";
+
+        let s = document.createElement("input");
+        s.type = "number"; s.min = "0"; s.max = "59"; s.placeholder = "ss";
+
+        div.appendChild(h);
+        div.appendChild(m);
+        div.appendChild(s);
+
+        container.appendChild(div);
+    }
+}
+</script>
+
+</body>
+</html>
